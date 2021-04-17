@@ -1,6 +1,8 @@
 import * as cdk from "@aws-cdk/core";
 import * as lambda from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
+import { Rule, Schedule } from '@aws-cdk/aws-events';
+import { LambdaFunction } from '@aws-cdk/aws-events-targets';
 import { NODE_LAMBDA_LAYER_DIR } from "./process/setup";
 import ENVIRONMENTS from "../lambda/utils/env";
 
@@ -13,7 +15,7 @@ export class CloudBillingNotifierStack extends cdk.Stack {
       compatibleRuntimes: [lambda.Runtime.NODEJS_12_X],
     });
 
-    const lambdaFunc = new lambda.Function(this, "aws-billing", {
+    const awsBilling = new lambda.Function(this, "aws-billing", {
       runtime: lambda.Runtime.NODEJS_12_X,
       code: lambda.Code.fromAsset("out/lambda"),
       handler: "index.handler",
@@ -30,5 +32,12 @@ export class CloudBillingNotifierStack extends cdk.Stack {
       memorySize: 512,
       layers: [nodeModulesLayer],
     });
+
+    new Rule(this, 'aws-billing-schedule', {
+      schedule: Schedule.cron({
+        minute: '0',
+        hour: '0',
+      }),
+    }).addTarget(new LambdaFunction(awsBilling));
   }
 }
