@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import * as childProcess from 'child_process';
 import * as fs from 'fs-extra';
 
