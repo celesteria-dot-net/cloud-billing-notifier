@@ -53,12 +53,12 @@ const fetchMonthSum = async (page: Page) => {
       console.error(err);
     });
 
-  const rate = await page.$eval(
+  const sum = await page.$eval(
     'div[data-testid="aws-billing-dashboard-spendsummary-total-fx"',
     (el) => el.firstChild?.textContent
   );
 
-  return rate ? parseFloat(rate) : -1;
+  return sum ? parseFloat(sum) : -1;
 };
 
 export { loginAws, fetchExchangeRate, fetchMonthSum };
