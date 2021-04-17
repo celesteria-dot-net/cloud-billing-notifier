@@ -29,7 +29,7 @@ export class CloudBillingNotifierStack extends cdk.Stack {
         DISCORD_WEBHOOK: ENVIRONMENTS.DISCORD_WEBHOOK,
       },
       timeout: Duration.minutes(1),
-      memorySize: 512,
+      memorySize: 1024,
       layers: [nodeModulesLayer],
     });
 
