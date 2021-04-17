@@ -10,7 +10,8 @@ export class CloudBillingNotifierStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const nodeModulesLayer = new lambda.LayerVersion(this, "NodeModulesLayer", {
+    const nodeModulesLayer = new lambda.LayerVersion(this, "ChromeWithLamda", {
+      description: "このレイヤーはchrome-aws-lambdaほかcloud-billing-notifierリポジトリに必要な依存関係パッケージが含まれています。",
       code: lambda.AssetCode.fromAsset(NODE_LAMBDA_LAYER_DIR),
       compatibleRuntimes: [lambda.Runtime.NODEJS_12_X],
     });
