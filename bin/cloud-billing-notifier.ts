@@ -2,6 +2,9 @@
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
 import { CloudBillingNotifierStack } from '../lib/cloud-billing-notifier-stack';
+import { bundleNpm } from '../lib/process/setup';
+
+bundleNpm();
 
 const app = new cdk.App();
 new CloudBillingNotifierStack(app, 'CloudBillingNotifierStack', {
