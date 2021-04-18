@@ -43,22 +43,25 @@ const fetchExchangeRate = async (page: Page) => {
 };
 
 const fetchMonthSum = async (page: Page) => {
-  await page.goto(BILLING_HOME_URL, { waitUntil: "domcontentloaded" });
-  await page
-    .waitForSelector(
-      'div[data-testid="aws-billing-dashboard-spendsummary-exchange-rate"'
-    )
-    .catch((err) => {
-      console.error("AWS Billing ホーム画面に到達できませんでした。");
-      console.error(err);
-    });
+const takeScrShot = async (page: Page) => {
+  const elementRect = await page.$eval(
+    'div[data-testid="spend-by-service-container-widget"]',
+    (el) => {
+      const rect = el.getBoundingClientRect();
 
-  const sum = await page.$eval(
-    'div[data-testid="aws-billing-dashboard-spendsummary-total-fx"',
-    (el) => el.firstChild?.textContent
+      return {
+        x: rect.left,
+        y: rect.top,
+        width: rect.width,
+        height: rect.height,
+      };
+    }
   );
 
-  return sum ? parseFloat(sum) : -1;
+  return page.screenshot({
+    path: billingScrShotPath,
+    clip: elementRect,
+  });
 };
 
 export { loginAws, fetchExchangeRate, fetchMonthSum };
