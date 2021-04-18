@@ -3,7 +3,7 @@ import { loginAws, fetchExchangeRate, fetchMonthSum } from "./domains/aws";
 import BROWSER_OPTIONS from "./utils/puppeteer";
 import webhook from "./domains/discord";
 import { MessageBuilder } from "discord-webhook-node";
-import round from "./utils/date";
+import round from "./utils/number";
 
 export const handler = async () => {
   const browser = await chromium.puppeteer.launch({
