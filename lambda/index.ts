@@ -10,6 +10,7 @@ import {
   moveToBillingHome,
 } from "./domains/aws";
 import webhook from "./domains/discord";
+import uploadImage from "./domains/gyazo";
 import BROWSER_OPTIONS from "./utils/puppeteer";
 import round from "./utils/number";
 
@@ -43,6 +44,8 @@ export const handler = async () => {
 
   await browser.close();
 
+  const gyazoResponse = await uploadImage(billingScrShotPath)
+
   const embed = new MessageBuilder()
     .setAuthor("AWS Cost Information")
     .setDescription(
@@ -50,7 +53,7 @@ export const handler = async () => {
     )
     .addField("今月の請求(JPY)", round(monthlySum, 100).toString(), true)
     .addField("為替レート(JPY)", round(rate, 100).toString(), true)
-    .setImage(billingScrShotPath);
+    .setImage(gyazoResponse.url);
   await webhook.send(embed).catch((err) => {
     console.error("DiscordにWebhookを送信できませんでした。");
     console.error(err);
