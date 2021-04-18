@@ -7,6 +7,7 @@ const billingScrShotPath = `/tmp/aws-billing.${format(
   new Date(),
   "yyyyMMdd"
 )}.png`;
+const billingRateSelector = 'div[data-testid="aws-billing-dashboard-spendsummary-exchange-rate"'
 
 const loginAws = async (page: Page): Promise<HTTPResponse | null> => {
   await page.goto(
@@ -23,23 +24,20 @@ const loginAws = async (page: Page): Promise<HTTPResponse | null> => {
     console.error("AWSのサインインボタンをクリックできませんでした。");
     console.error(err);
   });
+
   return page.waitForNavigation();
 };
 
 const moveToBillingHome = async (page: Page) => {
-  const selector =
-    'div[data-testid="aws-billing-dashboard-spendsummary-exchange-rate"';
-
   await page.goto(BILLING_HOME_URL, {
     waitUntil: "domcontentloaded",
   });
-  return page.waitForSelector(selector);
+
+  return page.waitForSelector(billingRateSelector);
 };
 
 const fetchExchangeRate = async (page: Page) => {
-  const selector =
-    'div[data-testid="aws-billing-dashboard-spendsummary-exchange-rate"';
-  const rate = await page.$eval(selector, (el) => el.lastChild?.textContent);
+  const rate = await page.$eval(billingRateSelector, (el) => el.lastChild?.textContent);
 
   return rate ? parseFloat(rate) : -1;
 };
