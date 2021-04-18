@@ -28,6 +28,7 @@ export class CloudBillingNotifierStack extends cdk.Stack {
         EXCHANGE_RATE_SCRAPING_PASSWORD:
           ENVIRONMENTS.EXCHANGE_RATE_SCRAPING_PASSWORD,
         DISCORD_WEBHOOK: ENVIRONMENTS.DISCORD_WEBHOOK,
+        GYAZO_TOKEN: ENVIRONMENTS.GYAZO_TOKEN,
       },
       timeout: Duration.minutes(1),
       memorySize: 1024,
