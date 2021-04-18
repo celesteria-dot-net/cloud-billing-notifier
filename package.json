@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "chrome-aws-lambda": "^8.0.2",
+    "date-fns": "^2.21.1",
     "discord-webhook-node": "^1.1.8",
     "puppeteer-core": "^8.0.0",
     "ts-dotenv": "^0.8.3"
