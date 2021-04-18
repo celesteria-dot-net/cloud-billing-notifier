@@ -1,8 +1,8 @@
 import * as cdk from "@aws-cdk/core";
 import * as lambda from "@aws-cdk/aws-lambda";
 import { Duration } from "@aws-cdk/core";
-import { Rule, Schedule } from '@aws-cdk/aws-events';
-import { LambdaFunction } from '@aws-cdk/aws-events-targets';
+import { Rule, Schedule } from "@aws-cdk/aws-events";
+import { LambdaFunction } from "@aws-cdk/aws-events-targets";
 import { NODE_LAMBDA_LAYER_DIR } from "./process/setup";
 import ENVIRONMENTS from "../lambda/utils/env";
 
@@ -11,7 +11,8 @@ export class CloudBillingNotifierStack extends cdk.Stack {
     super(scope, id, props);
 
     const nodeModulesLayer = new lambda.LayerVersion(this, "ChromeWithLamda", {
-      description: "このレイヤーはchrome-aws-lambdaほかcloud-billing-notifierリポジトリに必要な依存関係パッケージが含まれています。",
+      description:
+        "このレイヤーはchrome-aws-lambdaほかcloud-billing-notifierリポジトリに必要な依存関係パッケージが含まれています。",
       code: lambda.AssetCode.fromAsset(NODE_LAMBDA_LAYER_DIR),
       compatibleRuntimes: [lambda.Runtime.NODEJS_12_X],
     });
@@ -35,10 +36,10 @@ export class CloudBillingNotifierStack extends cdk.Stack {
       layers: [nodeModulesLayer],
     });
 
-    new Rule(this, 'aws-billing-schedule', {
+    new Rule(this, "aws-billing-schedule", {
       schedule: Schedule.cron({
-        minute: '0',
-        hour: '0',
+        minute: "0",
+        hour: "0",
       }),
     }).addTarget(new LambdaFunction(awsBilling));
   }
