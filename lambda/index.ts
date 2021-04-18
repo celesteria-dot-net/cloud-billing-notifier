@@ -1,5 +1,5 @@
 import chromium from "chrome-aws-lambda";
-import { loginAws, fetchExchangeRate, fetchMonthSum } from "./domains/aws";
+import { loginAws, fetchExchangeRate, fetchMonthSum, billingScrShotPath, takeScrShot, moveToBillingHome } from "./domains/aws";
 import BROWSER_OPTIONS from "./utils/puppeteer";
 import webhook from "./domains/discord";
 import { MessageBuilder } from "discord-webhook-node";
@@ -19,16 +19,27 @@ export const handler = async () => {
     console.error(err);
   });
 
+  await moveToBillingHome(page).catch((err) => {
+    console.error("AWS Billing ホーム画面に到達できませんでした。");
+    console.error(err);
+  });
+
   const rate = await fetchExchangeRate(page);
   const monthlySum = await fetchMonthSum(page);
+
+  await takeScrShot(page).catch((err) => {
+    console.error("サービス別請求内訳のスクリーンショットの作成に失敗しました。");
+    console.error(err);
+  });
 
   await browser.close();
 
   const embed = new MessageBuilder()
     .setAuthor("AWS Cost Information")
-    .setDescription(`${new Date().getFullYear()}/${new Date().getMonth() + 1}における現時点での請求額通知です。`)
+    .setDescription(`${format(new Date(), 'yyyy/MM')}における現時点での請求額通知です。`)
     .addField("今月の請求(JPY)", round(monthlySum, 100).toString(), true)
-    .addField("為替レート(JPY)", round(rate, 100).toString(), true);
+    .addField("為替レート(JPY)", round(rate, 100).toString(), true)
+    .setImage(billingScrShotPath);
   await webhook.send(embed);
 
   return {
