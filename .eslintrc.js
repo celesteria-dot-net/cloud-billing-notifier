@@ -70,6 +70,7 @@ module.exports = {
         },
       },
     ],
+    'import/no-extraneous-dependencies': 'off',
     'prefer-arrow/prefer-arrow-functions': [
       'error',
       {
@@ -83,7 +84,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        paths: ['bin', 'lib', 'test', "lambda"],
+        paths: ['bin', 'lib', 'test', 'lambda'],
       },
     },
   },
