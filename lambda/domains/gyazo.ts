@@ -1,7 +1,8 @@
-import fetch from "node-fetch";
-import FormData from 'form-data'
-import { createReadStream } from "fs";
-import ENVIRONMENTS from "../utils/env";
+/* eslint-disable camelcase */
+import { createReadStream } from 'fs';
+import FormData from 'form-data';
+import fetch from 'node-fetch';
+import ENVIRONMENTS from '../utils/env';
 
 type gyazoApiResponse = {
   image_id: string;
@@ -12,17 +13,17 @@ type gyazoApiResponse = {
 };
 
 const uploadImage = async (imagePath: string): Promise<gyazoApiResponse> => {
-  const formData = new FormData()
-  formData.append("access_token", ENVIRONMENTS.GYAZO_TOKEN)
-  formData.append("imagedata", createReadStream(imagePath))
+  const formData = new FormData();
+  formData.append('access_token', ENVIRONMENTS.GYAZO_TOKEN);
+  formData.append('imagedata', createReadStream(imagePath));
 
-  const response = await fetch("https://upload.gyazo.com/api/upload", {
-    method: "POST",
+  const response = await fetch('https://upload.gyazo.com/api/upload', {
+    method: 'POST',
     body: formData,
-    headers: formData.getHeaders()
+    headers: formData.getHeaders(),
   });
 
-  return response.json();
+  return response.json() as Promise<gyazoApiResponse>;
 };
 
 export default uploadImage;

@@ -1,4 +1,4 @@
-import { load } from "ts-dotenv";
+import { load } from 'ts-dotenv';
 
 const ENVIRONMENTS = load({
   EXCHANGE_RATE_SCRAPING_ACCOUNT_ID: String,
