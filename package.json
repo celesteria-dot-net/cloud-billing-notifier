@@ -8,7 +8,11 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "fix": "npm run -s format && npm run -s lint:fix",
+    "lint": "eslint '{bin,lib,test,lambda}/**/*.{js,ts}'",
+    "lint:fix": "eslint --fix '{bin,lib,test,lambda}/**/*.{js,ts}'",
+    "format": "prettier --write --loglevel=warn '{bin,lib,test,lambda}/**/*.{js,ts,gql,graphql,json}'"
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.98.0",
@@ -26,10 +30,12 @@
     "aws-cdk": "1.98.0",
     "eslint": "^7.24.0",
     "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.2.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "fs-extra": "^9.1.0",
     "jest": "^26.4.2",
+    "prettier": "^2.2.1",
     "source-map-support": "^0.5.19",
     "ts-jest": "^26.2.0",
     "ts-node": "^9.0.0",
