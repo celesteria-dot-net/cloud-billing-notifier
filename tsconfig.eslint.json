@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "bin/**/*.js",
+    "bin/**/*.ts",
+    "lib/**/*.js",
+    "lib/**/*.ts",
+    "test/**/*.js",
+    "test/**/*.ts",
+    "lambda/**/*.ts"
+  ],
+  "exclude": ["node_modules", "bundle"]
+}
