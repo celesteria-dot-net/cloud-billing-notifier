@@ -1,7 +1,12 @@
 import { Page, HTTPResponse } from "puppeteer-core";
+import { format } from "date-fns";
 import ENVIRONMENTS from "../utils/env";
 
 const BILLING_HOME_URL = "https://console.aws.amazon.com/billing/home#/";
+const billingScrShotPath = `/tmp/aws-billing.${format(
+  new Date(),
+  "yyyyMMdd"
+)}.png`;
 
 const loginAws = async (page: Page): Promise<HTTPResponse | null> => {
   await page.goto(
@@ -21,28 +26,32 @@ const loginAws = async (page: Page): Promise<HTTPResponse | null> => {
   return page.waitForNavigation();
 };
 
-const fetchExchangeRate = async (page: Page) => {
+const moveToBillingHome = async (page: Page) => {
+  const selector =
+    'div[data-testid="aws-billing-dashboard-spendsummary-exchange-rate"';
+
   await page.goto(BILLING_HOME_URL, {
     waitUntil: "domcontentloaded",
   });
-  await page
-    .waitForSelector(
-      'div[data-testid="aws-billing-dashboard-spendsummary-exchange-rate"'
-    )
-    .catch((err) => {
-      console.error("AWS Billing ホーム画面に到達できませんでした。");
-      console.error(err);
-    });
+  return page.waitForSelector(selector);
+};
 
-  const rate = await page.$eval(
-    'div[data-testid="aws-billing-dashboard-spendsummary-exchange-rate"',
-    (el) => el.lastChild?.textContent
-  );
+const fetchExchangeRate = async (page: Page) => {
+  const selector =
+    'div[data-testid="aws-billing-dashboard-spendsummary-exchange-rate"';
+  const rate = await page.$eval(selector, (el) => el.lastChild?.textContent);
 
   return rate ? parseFloat(rate) : -1;
 };
 
 const fetchMonthSum = async (page: Page) => {
+  const selector =
+    'div[data-testid="aws-billing-dashboard-spendsummary-total-fx"';
+  const sum = await page.$eval(selector, (el) => el.firstChild?.textContent);
+
+  return sum ? parseFloat(sum) : -1;
+};
+
 const takeScrShot = async (page: Page) => {
   const elementRect = await page.$eval(
     'div[data-testid="spend-by-service-container-widget"]',
@@ -64,4 +73,11 @@ const takeScrShot = async (page: Page) => {
   });
 };
 
-export { loginAws, fetchExchangeRate, fetchMonthSum };
+export {
+  loginAws,
+  fetchExchangeRate,
+  fetchMonthSum,
+  takeScrShot,
+  billingScrShotPath,
+  moveToBillingHome,
+};
